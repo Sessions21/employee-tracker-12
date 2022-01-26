@@ -44,11 +44,11 @@ function startQuestions() {
     const option = res.option
     switch(option) {
       case "employees":
-        viewEmployees()
+        viewEmp()
         break;
 
       case "departments":
-        viewDepartments()
+        viewDep()
         break;
 
       case "roles":
@@ -56,20 +56,45 @@ function startQuestions() {
         break;
 
       case "add_emp":
-        addEmployee()
+        addEmp()
         break;
 
       case "add_dep":
-        addDepartment()
+        addDep()
         break;
 
       case "add_role":
         addRole()
         break;
-        
+
       case "update_role":
-        updateEmployeeRole()
+        updateEmpRole()
         break;
     }
+  });
+}
+
+function viewEmp () {
+  DB.findAllEmployees ().then(([rows]) => {
+    let employees = rows
+    console.table(employees)
+    startQuestions()
+  })
+} 
+
+function viewDep () {
+  DB.findAllDept ().then(([rows]) => {
+    let department = rows
+    console.table(department)
+    startQuestions()
+  })
+} 
+
+function viewRoles () {
+  DB.findAllRoles ().then(([rows]) => {
+    let roles = rows
+    console.table(roles)
+    startQuestions()
   })
 }
+
