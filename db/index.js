@@ -20,5 +20,15 @@ class DB {
           "SELECT department.id, department.name FROM department;"
       );
   }
+  addEmp(employee) {
+    return this.connection.promise().query(
+        "INSERT INTO employee SET ?", employee
+    );
+  }
+  getManagers() {
+    return this.connection.promise().query(
+        "SELECT * FROM employee WHERE manager_id IS null",
+    );
+  }
 }
 module.exports = new DB(connection);
