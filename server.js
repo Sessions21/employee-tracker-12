@@ -66,7 +66,7 @@ function startQuestions() {
         break;
 
       case "add_dep":
-        addDep()
+        addDept()
         break;
 
       case "add_role":
@@ -111,45 +111,62 @@ function viewRoles () {
 
 async function addEmp() {
   const managers = await DB.getManagers()
-  console.table(managers [0] )
-const managerMap = await managers[0].map(({ id, first_name, last_name, })=> ( {
+    console.table(managers [0] )
+  const managerMap = await managers[0].map(({ id, first_name, last_name, })=> ( {
     name: `${first_name} ${last_name}`,
     value: id
-}))
-managerMap.unshift({
+  })
+)
+  managerMap.unshift({
     name: "none",
-value: null
-})
+    value: null
+  })
 
-inquirer.prompt([
-{
-  name: "first_name",
-  type: "input",
-  message: "New employee first name?"
-},
-{
-    name: "last_name",
-    type: "input",
-    message: "New employee last name?",
-},
-{
-    name: "role_id",
-    type: "input",
-    message: "Employee Role ID?"
-},
-{
-    name: "manager_id",
-    type: "list",
-    message: "Please select employee's manager.",
-    choices: managerMap
-},
-])
-.then(res => {
-    console.table(res);
-  DB.addEmp(res)
-    .then(() => console.table(`Added ${res.first_name} ${res.last_name} to the database`))
-    .then(() => startQuestions())
-})
+  inquirer.prompt([
+    {
+      name: "first_name",
+      type: "input",
+      message: "New employee first name?"
+    },
+    {
+      name: "last_name",
+      type: "input",
+      message: "New employee last name?",
+    },
+    {
+      name: "role_id",
+      type: "input",
+      message: "Employee Role ID?"
+    },
+    {
+      name: "manager_id",
+      type: "list",
+      message: "Please select employee's manager.",
+      choices: managerMap
+    },
+  ])
+  .then(res => {
+      console.table(res);
+    DB.addEmp(res)
+      .then(() => console.table(`Added ${res.first_name} ${res.last_name} to the database`))
+      .then(() => startQuestions())
+  })
+}
+
+function addDept() {
+
+  inquirer.prompt([
+    {
+      name: "name",
+      message: "Please provide the new department name?"
+    }
+  ])
+    .then(res => {
+      let name = res;
+      DB.addDept(name)
+        .then(() => console.table(`${name.name} department added to the database.`))
+        .then(() => startQuestions())
+    })
 }
 
 startQuestions();
