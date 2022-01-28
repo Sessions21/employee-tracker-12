@@ -1,13 +1,15 @@
 const db = require('./db/connection');
 const inquirer = require("inquirer");
-const cTable = require('console.table');
 const DB = require('./db/index.js');
+const cTable = require('console.table');
+
+
 
 function startQuestions() {
   inquirer.prompt([
     {
       type: "list",
-      name: "start",
+      name: "option",
       message: "This application allows you to create, update, delete and view employee records.  See below for a list of options.",
       choices: [
         {
@@ -23,20 +25,24 @@ function startQuestions() {
           value:"roles"
         },
         {
-          name:"Add an Employee",
+          name:"Add Employee",
           value:"add_emp"
         },
         {
-          name:"Add a Department",
+          name:"Add Department",
           value:"add_dep"
         },
         {
-          name:"Add a Role",
+          name:"Add Role",
           value:"add_role"
         },
         {
           name:"Update Employee Role",
           value:"update_role"
+        },
+        {
+          name: "EXIT",
+          value: "exit"
         }
       ]
     }
@@ -70,6 +76,11 @@ function startQuestions() {
       case "update_role":
         updateEmpRole()
         break;
+      case "exit":
+        console.log("Thank you! Good bye.");
+        break;
+      default:
+        console.log("default");
     }
   });
 }
