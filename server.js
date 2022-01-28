@@ -76,6 +76,7 @@ function startQuestions() {
       case "update_role":
         updateEmpRole()
         break;
+
       case "exit":
         console.log("Thank you! Good bye.");
         break;
@@ -202,6 +203,37 @@ async function addRole() {
   })
 }
 
+  async function updateEmpRole () {
+    const employees = await db.promise().query(`SELECT * FROM employee`);
+    const employeesMap = await employees[0].map(({id, first_name, last_name, role_id, manager_id}) => ({
+      name: `${first_name} ${last_name}`,
+      value: id
+    })
+  )
 
+    const roles = await db.promise().query(`SELECT * FROM role`);
+    const rolesMap = await roles[0].map(({id, title, salary, department_id}) => ({
+      name: title,
+      value: id
+    })
+  )
+
+    const employeeData = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'id',
+        message: 'Which employee would you like to edit?',
+        choices: employeesMap
+      },
+      {
+        type: 'list',
+        name:'role_id',
+        message: 'What is their new role?',
+        choices: rolesMap
+      }
+    ])
+    await db.promise().query(`UPDATE employee SET role_id = ${employeeData.role_id} WHERE id= ${employeeData.id}`);
+  startQuestions();
+}
 
 startQuestions();
