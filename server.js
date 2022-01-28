@@ -154,7 +154,6 @@ async function addEmp() {
 }
 
 function addDept() {
-
   inquirer.prompt([
     {
       name: "name",
@@ -166,7 +165,43 @@ function addDept() {
       DB.addDept(name)
         .then(() => console.table(`${name.name} department added to the database.`))
         .then(() => startQuestions())
-    })
+  })
 }
+
+async function addRole() {
+
+  const departments = await db.promise().query('SELECT * FROM department');
+  const departmentMap = await departments[0].map(({id, name}) => ({
+    name: name, 
+    value: id
+  }));
+
+  inquirer.prompt([
+    {
+      name: "title",
+      type: "input",
+      message: "Please provide the name of the new role?"
+    },
+    {
+      name: "salary",
+      type: "input",
+      message: "What is the associatted salary?",
+    },
+    {
+      name: "department_id",
+      type: "list",
+      choices: departmentMap,
+      message: "Which department would you like to add the role to?"
+    }
+  ])
+  .then(res => {
+      console.table(res);
+    DB.addRole(res)
+      .then(() => console.table(`New role ${res.title} added to the database.`))
+      .then(() => startQuestions())
+  })
+}
+
+
 
 startQuestions();
